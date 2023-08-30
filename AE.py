@@ -11,7 +11,7 @@ x = np.array([
 valores = []
 letra = ''
 
-yd = np.array([0, 1])
+yd = np.array([1, 0])
 
 # Tasa de aprendizaje y número máximo de épocas.
 alfa = 0.004
@@ -79,9 +79,9 @@ ventana.mainloop()
 valores.insert(0, 1)
 comp = np.dot(valores, w)
 if comp > 0:
-    letra = 'E'
-else:
     letra = 'A'
+else:
+    letra = 'E'
 
 print (letra)
     

@@ -72,7 +72,7 @@ for epoch in range(epochs):
 print("finaliza el entrenamientoB")
 
 # Predicción
-new_input = np.array([0, 1, 1, 1, 0, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1])  # Reemplaza con tus datos de entrada
+new_input = np.array([0, 1, 1, 1, 0, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 0, 1, 1, 1, 0])  # Reemplaza con tus datos de entrada
 hidden_layer_input = np.dot(new_input, weights_input_hidden)
 hidden_layer_output = sigmoid(hidden_layer_input)
 output_layer_input = np.dot(hidden_layer_output, weights_hidden_output)
