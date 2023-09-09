@@ -9,7 +9,7 @@ def inicializar_pesos(num_entradas):
 # Función de entrenamiento
 
 
-def entrenar_perceptron(X, YD, alpha, precision):
+def entrenar_adaline(X, YD, alpha, precision):
     num_entradas = X.shape[1]
     num_muestras = X.shape[0]
 
@@ -76,21 +76,55 @@ def analizar_datos(datos, pesos_entrenados):
 # Ejemplo de uso
 if __name__ == "__main__":
     # Datos de entrada (X) y salida deseada (YD)
-    X = np.array([[0, 0], [0, 1], [1, 0], [1, 1]])
+    X = np.array([[0, 0],
+                  [0, 1],
+                  [1, 0],
+                  [1, 1],])
+
     YD = np.array([0, 1, 2, 3])
+
+    X2 = np.array([[0, 0, 0],
+                   [0, 0, 1],
+                   [0, 1, 0],
+                   [0, 1, 1],
+                   [1, 0, 0],
+                   [1, 0, 1],
+                   [1, 1, 0],
+                   [1, 1, 1]])
+
+    YD2 = np.array([0, 1, 2, 3, 4, 5, 6, 7])
+
+    X3 = np.array([[0, 0, 0, 0],
+                   [0, 0, 0, 1],
+                   [0, 0, 1, 0],
+                   [0, 0, 1, 1],
+                   [0, 1, 0, 0],
+                   [0, 1, 0, 1],
+                   [0, 1, 1, 0],
+                   [0, 1, 1, 1],
+                   [1, 0, 0, 0],
+                   [1, 0, 0, 1],
+                   [1, 0, 1, 0],
+                   [1, 0, 1, 1],
+                   [1, 1, 0, 0],
+                   [1, 1, 0, 1],
+                   [1, 1, 1, 0],
+                   [1, 1, 1, 1]])
+
+    YD3 = np.array([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15])
 
     # Parámetros de entrenamiento
     alpha = 0.1
     precision = 0.001
 
     # Entrenar el perceptrón
-    pesos_entrenados = entrenar_perceptron(X, YD, alpha, precision)
+    pesos_entrenados = entrenar_adaline(X3, YD3, alpha, precision)
 
     # Imprimir los pesos entrenados
     print("Pesos entrenados:", pesos_entrenados)
 
     # Datos para análisis
-    datos_analisis = np.array([[1, 1]])
+    datos_analisis = np.array([[1, 1, 0, 1]])
 
     # Utilizar el perceptrón entrenado para analizar datos
     resultados_analisis = analizar_datos(datos_analisis, pesos_entrenados)
