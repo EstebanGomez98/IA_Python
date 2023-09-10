@@ -245,14 +245,13 @@ if __name__ == "__main__":
                 sg.popup(f"Reconocimiento completado, el resultado es: ",
                          valores_redondeados)
 
-                # Graficar el error por época
-                plt.plot(range(1, len(errores_por_epoca) + 1),
-                         errores_por_epoca)
-                plt.xlabel("Época")
-                plt.ylabel("Error")
-                plt.title("Error por Época")
-                plt.grid(True)
-                plt.show()  # Mostrar la gráfica
-
     # Close the window
     window.close()
+
+    # Graficar el error por época
+    plt.plot(range(1, len(errores_por_epoca) + 1), errores_por_epoca)
+    plt.xlabel("Época")
+    plt.ylabel("Error")
+    plt.title("Error por Época")
+    plt.grid(True)
+    plt.show()  # Mostrar la gráfica
