@@ -1,32 +1,36 @@
 import numpy as np
 
 # Define the sigmoid activation function and its derivative
+
+
 def sigmoid(x):
     return 1 / (1 + np.exp(-x))
+
 
 def sigmoid_derivative(x):
     return x * (1 - x)
 
+
 # Define the training data
-X = np.array([[0, 0, 0, 0],
-              [0, 0, 0, 1],
-              [0, 0, 1, 0],
-              [0, 0, 1, 1],
-              [0, 1, 0, 0],
-              [0, 1, 0, 1],
-              [0, 1, 1, 0],
-              [0, 1, 1, 1],
-              [1, 0, 0, 0],
-              [1, 0, 0, 1],
-              [1, 0, 1, 0],
-              [1, 0, 1, 1],
-              [1, 1, 0, 0],
-              [1, 1, 0, 1],
-              [1, 1, 1, 0],
-              [1, 1, 1, 1]])
+X = np.array([[0.552841309, 0.547656981191987, -1],
+              [0.36226323, 0.568600319, 1],
+              [0, 0, 1],
+              [0, 0, 1],
+              [0, 1, 0],
+              [0, 1, 0],
+              [0, 1, 1],
+              [0, 1, 1],
+              [1, 0, 0],
+              [1, 0, 0],
+              [1, 0, 1],
+              [1, 0, 1],
+              [1, 1, 0],
+              [1, 1, 0],
+              [1, 1, 1],
+              [1, 1, 1]])
 
 # Define the corresponding labels
-y = np.array([[0],
+y = np.array([[0, 378854248],
               [1],
               [1],
               [0],
@@ -49,7 +53,7 @@ hidden_size = 3
 output_size = 1
 
 # Alpha
-learning_rate = 0.1
+learning_rate = 0.001
 
 # Beta
 beta = 0.9
@@ -77,17 +81,20 @@ for epoch in range(10000):
     # Backpropagation
     d_output = error * sigmoid_derivative(output_layer_output)
     error_hidden_layer = d_output.dot(weights_hidden_output.T)
-    d_hidden_layer = error_hidden_layer * sigmoid_derivative(hidden_layer_output)
+    d_hidden_layer = error_hidden_layer * \
+        sigmoid_derivative(hidden_layer_output)
 
     # Update weights and biases with momentum
-    momentum_input_hidden = (beta * momentum_input_hidden + learning_rate * X.T.dot(d_hidden_layer))
+    momentum_input_hidden = (
+        beta * momentum_input_hidden + learning_rate * X.T.dot(d_hidden_layer))
     weights_input_hidden += momentum_input_hidden
 
-    momentum_hidden_output = (beta * momentum_hidden_output + learning_rate * hidden_layer_output.T.dot(d_output))
+    momentum_hidden_output = (beta * momentum_hidden_output +
+                              learning_rate * hidden_layer_output.T.dot(d_output))
     weights_hidden_output += momentum_hidden_output
 
 # Testing the neural network
-new_input = np.array([0, 0, 1, 1])
+new_input = np.array([0, 1, 0, 0])
 hidden_layer_input = np.dot(new_input, weights_input_hidden)
 hidden_layer_output = sigmoid(hidden_layer_input)
 output_layer_input = np.dot(hidden_layer_output, weights_hidden_output)
