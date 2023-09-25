@@ -94,7 +94,7 @@ for epoch in range(100000):
     weights_hidden_output += momentum_hidden_output
 
 # Testing the neural network
-new_input = np.array([1, 1, 1, 0])
+new_input = np.array([0, 0, 0, 1])
 hidden_layer_input = np.dot(new_input, weights_input_hidden)
 hidden_layer_output = sigmoid(hidden_layer_input)
 output_layer_input = np.dot(hidden_layer_output, weights_hidden_output)

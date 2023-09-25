@@ -2,6 +2,8 @@ import numpy as np
 import PySimpleGUI as sg
 
 # Define the sigmoid activation function and its derivative
+
+
 def sigmoid(x):
     return 1 / (1 + np.exp(-x))
 
@@ -9,8 +11,6 @@ def sigmoid(x):
 def sigmoid_derivative(x):
     return x * (1 - x)
 
-def round(number):
-    return 1 if number >= 0.5 else 0
 
 # Define the training data
 X = np.array([[0, 0, 0, 0],
@@ -69,7 +69,7 @@ momentum_input_hidden = np.zeros_like(weights_input_hidden)
 momentum_hidden_output = np.zeros_like(weights_hidden_output)
 
 # Training the neural network
-for _ in range(1000):
+for _ in range(100000):
     # Forward propagation
     hidden_layer_input = np.dot(X, weights_input_hidden)
     hidden_layer_output = sigmoid(hidden_layer_input)
@@ -115,14 +115,16 @@ while True:
 
     if event == "Predecir":
         # Parse the input and convert it to a NumPy array
-        new_input = np.array([float(x.strip()) for x in values["-INPUT-"].split(",")])
+        new_input = np.array([float(x.strip())
+                             for x in values["-INPUT-"].split(",")])
 
         # Forward propagation
         hidden_layer_input = np.dot(new_input, weights_input_hidden)
         hidden_layer_output = sigmoid(hidden_layer_input)
         output_layer_input = np.dot(hidden_layer_output, weights_hidden_output)
         predicted_output = sigmoid(output_layer_input)
-        res = round(predicted_output)
+        res = [round(valor, 0) for valor in predicted_output]
+        print(res)
 
         # Update the GUI with the predicted output
         window["-OUTPUT-"].update(res)
