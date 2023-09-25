@@ -1,15 +1,21 @@
 import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
+
 
 # Define the sigmoid activation function and its derivative
+
+
 def sigmoid(x):
     return 1 / (1 + np.exp(-x))
+
 
 def sigmoid_derivative(x):
     return x * (1 - x)
 
+
 # Load your data (replace the path with your data file)
-excel_file = r"D:\Windows Lib\Documents\Repos\IA_Python\BP\data.xlsx"
+excel_file = r"D:\Biblioteca\Documentos\IA_Python\RNA\BP\data.xlsx"
 df = pd.read_excel(excel_file)
 df.iloc[:, 2] = df.iloc[:, 2].astype(int).astype(str).astype(int)
 selected_columns = df.iloc[:, :3].to_numpy()
@@ -17,7 +23,8 @@ last_column = df.iloc[:, -1].to_numpy()
 array_of_arrays = last_column.reshape(-1, 1)
 
 # Normalize the input data
-X = (selected_columns - selected_columns.mean(axis=0)) / selected_columns.std(axis=0)
+X = (selected_columns - selected_columns.mean(axis=0)) / \
+    selected_columns.std(axis=0)
 
 # Outputs
 y = array_of_arrays
@@ -39,7 +46,7 @@ weights_hidden_output = np.random.randn(hidden_size, output_size)
 # Initialize momentum terms
 momentum_input_hidden = np.zeros_like(weights_input_hidden)
 momentum_hidden_output = np.zeros_like(weights_hidden_output)
-
+errores = []
 # Training the neural network
 num_epochs = 1000  # Adjust the number of epochs
 for epoch in range(num_epochs):
@@ -51,11 +58,14 @@ for epoch in range(num_epochs):
 
     # Calculate the loss
     error = y - output_layer_output
+    mean_squared_error = 0.5 * np.mean(error**2)  # MSE loss
+    errores.append(mean_squared_error)
 
     # Backpropagation
     d_output = error * sigmoid_derivative(output_layer_output)
     error_hidden_layer = d_output.dot(weights_hidden_output.T)
-    d_hidden_layer = error_hidden_layer * sigmoid_derivative(hidden_layer_output)
+    d_hidden_layer = error_hidden_layer * \
+        sigmoid_derivative(hidden_layer_output)
 
     # Update weights and biases with momentum
     momentum_input_hidden = (
@@ -84,3 +94,10 @@ for i in range(10):
     print(f"Desired output {i + 1}: {y[i, :]}")
     print("-----")
     print(f"Predicted output {i + 1}: {predicted_output}")
+
+# Graficar el error cuadrático medio a lo largo de las épocas de entrenamiento
+plt.plot(errores)
+plt.xlabel('Época')
+plt.ylabel('Error Cuadrático Medio')
+plt.title('Error de Entrenamiento (MSE) a lo largo de las Épocas')
+plt.show()

@@ -1,5 +1,7 @@
 import numpy as np
 import PySimpleGUI as sg
+import matplotlib.pyplot as plt
+
 
 # Define the sigmoid activation function and its derivative
 
@@ -68,6 +70,8 @@ weights_hidden_output = np.random.uniform(size=(hidden_size, output_size))
 momentum_input_hidden = np.zeros_like(weights_input_hidden)
 momentum_hidden_output = np.zeros_like(weights_hidden_output)
 
+errores = []
+
 # Training the neural network
 for _ in range(100000):
     # Forward propagation
@@ -78,6 +82,8 @@ for _ in range(100000):
 
     # Calculate the loss
     error = y - output_layer_output
+    mean_squared_error = 0.5 * np.mean(error**2)  # MSE loss
+    errores.append(mean_squared_error)
 
     # Backpropagation
     d_output = error * sigmoid_derivative(output_layer_output)
@@ -129,3 +135,10 @@ while True:
         window["-OUTPUT-"].update(res)
 
 window.close()
+
+# Graficar el error cuadrático medio a lo largo de las épocas de entrenamiento
+plt.plot(errores)
+plt.xlabel('Época')
+plt.ylabel('Error Cuadrático Medio')
+plt.title('Error de Entrenamiento (MSE) a lo largo de las Épocas')
+plt.show()
