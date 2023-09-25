@@ -124,7 +124,6 @@ while True:
         output_layer_input = np.dot(hidden_layer_output, weights_hidden_output)
         predicted_output = sigmoid(output_layer_input)
         res = [round(valor, 0) for valor in predicted_output]
-        print(res)
 
         # Update the GUI with the predicted output
         window["-OUTPUT-"].update(res)
