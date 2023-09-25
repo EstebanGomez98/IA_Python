@@ -49,14 +49,14 @@ y = np.array([[0],
 
 # Initialize the neural network parameters
 input_size = 4
-hidden_size = 3
+hidden_size = 10
 output_size = 1
 
 # Alpha
-learning_rate = 0.001
+alpha = 0.01
 
 # Beta
-beta = 0.9
+beta = 0.10
 
 # Initialize weights and biases
 np.random.seed(1)
@@ -68,7 +68,7 @@ momentum_input_hidden = np.zeros_like(weights_input_hidden)
 momentum_hidden_output = np.zeros_like(weights_hidden_output)
 
 # Training the neural network
-for epoch in range(10000):
+for epoch in range(100000):
     # Forward propagation
     hidden_layer_input = np.dot(X, weights_input_hidden)
     hidden_layer_output = sigmoid(hidden_layer_input)
@@ -86,19 +86,20 @@ for epoch in range(10000):
 
     # Update weights and biases with momentum
     momentum_input_hidden = (
-        beta * momentum_input_hidden + learning_rate * X.T.dot(d_hidden_layer))
+        beta * momentum_input_hidden + alpha * X.T.dot(d_hidden_layer))
     weights_input_hidden += momentum_input_hidden
 
     momentum_hidden_output = (beta * momentum_hidden_output +
-                              learning_rate * hidden_layer_output.T.dot(d_output))
+                              alpha * hidden_layer_output.T.dot(d_output))
     weights_hidden_output += momentum_hidden_output
 
 # Testing the neural network
-new_input = np.array([0, 1, 0, 0])
+new_input = np.array([1, 1, 1, 0])
 hidden_layer_input = np.dot(new_input, weights_input_hidden)
 hidden_layer_output = sigmoid(hidden_layer_input)
 output_layer_input = np.dot(hidden_layer_output, weights_hidden_output)
 predicted_output = sigmoid(output_layer_input)
+valores_redondeados = [round(valor, 0) for valor in predicted_output]
 
 print("Input:", new_input)
-print("Predicted Output:", predicted_output)
+print("Predicted Output:", valores_redondeados)
