@@ -49,7 +49,7 @@ y = np.array([[0],
 
 # Initialize the neural network parameters
 input_size = 4
-hidden_size = 3
+hidden_size = 10
 output_size = 1
 
 # Alpha
@@ -99,6 +99,7 @@ hidden_layer_input = np.dot(new_input, weights_input_hidden)
 hidden_layer_output = sigmoid(hidden_layer_input)
 output_layer_input = np.dot(hidden_layer_output, weights_hidden_output)
 predicted_output = sigmoid(output_layer_input)
+valores_redondeados = [round(valor, 0) for valor in predicted_output]
 
 print("Input:", new_input)
-print("Predicted Output:", predicted_output)
+print("Predicted Output:", valores_redondeados)
