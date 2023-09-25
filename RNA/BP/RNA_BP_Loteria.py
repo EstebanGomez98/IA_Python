@@ -58,7 +58,7 @@ yd = np.array([[0.5, 0.1, 0.1, 0.5, 0.1, 0.1, 0.1, 0.1, 0.5, 0.1],
 print(yd)
 # Initialize the neural network parameters
 input_size = 5
-hidden_size1 = 20  # Tamaño de la primera capa oculta
+hidden_size1 = 15  # Tamaño de la primera capa oculta
 hidden_size2 = 15  # Tamaño de la segunda capa oculta
 output_size = 10
 
