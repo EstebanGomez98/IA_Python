@@ -1,31 +1,35 @@
 from PIL import Image
 import numpy as np
 
-# Open the image file
-image = Image.open('rgb_ia.png')  # Replace 'your_image_file.jpg' with the path to your image file
+# Abre el archivo de imagen
+image = Image.open('PEZCIRUJANO.jpg')
 
-# Convert the image to a NumPy array
+# Convierte la imagen a una matriz de NumPy
 image_array = np.array(image)
 
-# Split the image into RGB channels
+# Divide la imagen en canales RGB
 r, g, b = image.split()
 
-# Convert the channels to NumPy arrays
+# Convierte cada canal en una matriz NumPy
 r_array = np.array(r)
 g_array = np.array(g)
 b_array = np.array(b)
 
-# Display the RGB channels as separate images
+# Imprime las matrices de los canales R, G y B
+print("R", r_array)
+print("G", g_array)
+print("B", b_array)
+
+# Muestra cada canal por separado
 r.show(title='Red Channel')
 g.show(title='Green Channel')
 b.show(title='Blue Channel')
 
-# Create arrays for the RGB channels and intensity differences
+# Combina los canales en una matriz tridimensional (RGB)
 rgb_channels = np.dstack((r_array, g_array, b_array))
+
+# Calcula la diferencia de intensidad entre los canales R, G y B
 intensity_diff = np.max(rgb_channels, axis=2) - np.min(rgb_channels, axis=2)
 
-# Show the intensity difference as an image
-Image.fromarray(intensity_diff).show(title='Intensity Difference')
-
-# Close the image file when you're done with it (optional but recommended)
+# Cierra el archivo de imagen cuando hayas terminado con él (opcional pero recomendado)
 image.close()
