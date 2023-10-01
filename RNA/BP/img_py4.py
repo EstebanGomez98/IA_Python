@@ -36,7 +36,7 @@ plt.axis('off')
 
 # Muestra el canal rojo en la segunda subtrama
 plt.subplot(2, 2, 2)
-plt.imshow(r_array, cmap='Reds')
+plt.imshow(r_array, cmap='Reds')  # cmap='gray' se cambia a escala de grises
 plt.title('Red Channel')
 plt.axis('off')
 
