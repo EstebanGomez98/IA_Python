@@ -2,7 +2,8 @@ from PIL import Image
 import numpy as np
 
 # Abre el archivo de imagen
-image = Image.open('PEZCIRUJANO.jpg')
+image = Image.open(
+    'D:\Biblioteca\Documentos\IA_Python\RNA\BP\imagenes\rgb_ia.png')
 
 # Convierte la imagen a una matriz de NumPy
 image_array = np.array(image)

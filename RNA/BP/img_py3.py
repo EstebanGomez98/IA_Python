@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # Abre el archivo de imagen
-image = Image.open('PEZCIRUJANO.jpg')
+image = Image.open('RNA\BP\imagenes\EJEMPLO5.png')
 
 # Convierte la imagen a una matriz de NumPy
 image_array = np.array(image)
