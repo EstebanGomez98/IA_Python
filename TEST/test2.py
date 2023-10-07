@@ -107,16 +107,21 @@ def cambiar_tamano_imagen():
             imagen = Image.open(ruta_imagen)
 
             # Cambiar el tamaño de la imagen
-            # imagen_redimensionada = imagen.resize((24, 24))
+            # imagen_redimensionada = imagen.resize((800, 600))
 
             # Obtener la matriz de la imagen redimensionada
             matriz_img = np.array(imagen.convert("L"))
 
             # Aplicar los filtros k1 y k2
+            print("inicando convoluciones con los filtros")
+            print("convolucion 1")
             resultado = convolucion(matriz_img, k5)
+            print("convolucion 2")
             # resultado = convolucion(resultado, k2)
             resultado = convolucion(resultado, k3)
+            print("convolucion 3")
             resultado = convolucion(resultado, k4)
+            print("terminando las convoluciones")
             # resultado = convolucion(resultado, k5)
 
             # Convert the result back to an Image object
