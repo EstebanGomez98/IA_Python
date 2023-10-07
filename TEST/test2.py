@@ -1,14 +1,28 @@
 import tkinter as tk
 from tkinter import filedialog
-from PIL import Image
+from PIL import Image, ImageTk
 import os
 import numpy as np
 
-
 def aplicar_filtro(matriz, kernel):
-    resultado = np.dot(matriz, kernel)
+    altura, ancho = matriz.shape
+    kaltura, kancho = kernel.shape
+    resultado = np.zeros((altura - kaltura + 1, ancho - kancho + 1))
+    for i in range(altura - kaltura + 1):
+        for j in range(ancho - kancho + 1):
+            resultado[i, j] = np.sum(matriz[i:i+kaltura, j:j+kancho] * kernel)
     return resultado
 
+def mostrar_imagen_modificada(matriz):
+    # Create a new Image object from the modified matrix
+    imagen_modificada = Image.fromarray(matriz.astype('uint8'))
+
+    # Convert the modified image to PhotoImage format for Tkinter
+    imagen_tk = ImageTk.PhotoImage(imagen_modificada)
+
+    # Update the label to display the modified image
+    imagen_label.config(image=imagen_tk)
+    imagen_label.image = imagen_tk
 
 def cambiar_tamano_imagen():
     # Solicitar al usuario que seleccione una imagen
@@ -35,26 +49,17 @@ def cambiar_tamano_imagen():
             imagen_redimensionada = imagen.resize((24, 24))
 
             # Obtener la matriz de la imagen redimensionada
-            matriz_red = imagen_redimensionada.convert("L")
+            matriz_red = np.array(imagen_redimensionada.convert("L"))
 
-            # Obtener el nombre del archivo y la extensión
-            # nombre_archivo, extension = os.path.splitext(os.path.basename(ruta_imagen))
+            # Aplicar los filtros k1 y k2
+            resultado_k1 = aplicar_filtro(matriz_red, k1)
+            resultado_k2 = aplicar_filtro(matriz_red, k2)
 
-            # Guardar la imagen redimensionada con el mismo nombre que la imagen original y extensión .png
-            # ruta_guardar = nombre_archivo + '_redimensionada.png'
-            # imagen_redimensionada.save(ruta_guardar)
-
-            # resultado_label.config(text='Imagen redimensionada y guardada como ' + ruta_guardar)
+            # Mostrar la imagen modificada después de aplicar los filtros
+            mostrar_imagen_modificada(resultado_k1)  # You can choose either k1 or k2 here.
 
         except Exception as e:
             resultado_label.config(text='Error: ' + str(e))
-
-    # Aplicar los filtros k1 y k2
-    resultado_k1 = aplicar_filtro(matriz_red, k1)
-    resultado_k2 = aplicar_filtro(matriz_red, k2)
-    print("\n", resultado_k1)
-    print("\n", resultado_k2)
-
 
 # Crear una ventana de tkinter
 ventana = tk.Tk()
@@ -68,6 +73,10 @@ seleccionar_boton.pack(pady=20)
 # Etiqueta para mostrar el resultado
 resultado_label = tk.Label(ventana, text='')
 resultado_label.pack()
+
+# Etiqueta para mostrar la imagen redimensionada
+imagen_label = tk.Label(ventana)
+imagen_label.pack()
 
 # Iniciar el bucle principal de tkinter
 ventana.mainloop()
