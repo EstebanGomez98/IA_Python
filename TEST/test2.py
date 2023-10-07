@@ -79,6 +79,25 @@ def cambiar_tamano_imagen():
         [0, 0, 0],
         [1, 1, 1],
         [0, 0, 0]])
+
+    # enfoque
+    k3 = np.array([
+        [0, -1, 0],
+        [-1, 5, -1],
+        [0, -1, 0]])
+
+    # shapen
+    k4 = np.array([
+        [1, -2, 1],
+        [-2, 5, -2],
+        [1, -2, 1]])
+
+    # deteccion de vordes
+    k5 = np.array([
+        [0, 1, 0],
+        [1, -4, 1],
+        [0, 1, 0]])
+
     # Solicitar al usuario que seleccione una imagen
     ruta_imagen = filedialog.askopenfilename()
 
@@ -88,24 +107,30 @@ def cambiar_tamano_imagen():
             imagen = Image.open(ruta_imagen)
 
             # Cambiar el tamaño de la imagen
-            imagen_redimensionada = imagen.resize((24, 24))
+            # imagen_redimensionada = imagen.resize((24, 24))
 
             # Obtener la matriz de la imagen redimensionada
-            matriz_img = np.array(imagen_redimensionada.convert("L"))
+            matriz_img = np.array(imagen.convert("L"))
 
             # Aplicar los filtros k1 y k2
-            resultado_k1 = convolucion(matriz_img, k1)
-            resultado_k2 = convolucion(resultado_k1, k2)
+            resultado = convolucion(matriz_img, k5)
+            # resultado = convolucion(resultado, k2)
+            resultado = convolucion(resultado, k3)
+            resultado = convolucion(resultado, k4)
+            # resultado = convolucion(resultado, k5)
 
             # Convert the result back to an Image object
-            imagen_modificada = Image.fromarray(resultado_k2.astype('uint8'))
+            imagen_modificada = Image.fromarray(resultado.astype('uint8'))
+
+            # Cambiar el tamaño de la imagen
+            imagen_redimensionada = imagen_modificada.resize((100, 100))
 
             # Mostrar la imagen modificada después de aplicar los filtros
-            mostrar_imagen_modificada(imagen_modificada)
+            mostrar_imagen_modificada(imagen_redimensionada)
 
             # Enable the guardar_boton button
             guardar_boton.config(
-                state=tk.NORMAL, command=lambda: guardar_imagen_modificada(imagen_modificada))
+                state=tk.NORMAL, command=lambda: guardar_imagen_modificada(imagen_redimensionada))
 
         except Exception as e:
             resultado_label.config(text='Error: ' + str(e))
