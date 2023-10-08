@@ -2,57 +2,7 @@ import tkinter as tk
 from tkinter import filedialog
 from PIL import Image, ImageTk
 import numpy as np
-
-
-def aplicar_filtro(matriz, kernel):
-    m, n = matriz.shape
-    kaltura, kancho = kernel.shape
-    kaltura_half, kancho_half = kaltura // 2, kancho // 2
-
-    resultado = np.zeros((m, n), dtype=np.float32)
-
-    for i in range(kaltura_half, m - kaltura_half):
-        for j in range(kancho_half, n - kancho_half):
-            suma = 0
-            for x in range(kaltura):
-                for y in range(kancho):
-                    suma += matriz[i - kaltura_half + x,
-                                   j - kancho_half + y] * kernel[x, y]
-            resultado[i, j] = suma
-
-    return resultado
-
-
-def convolucion(imagen, kernel):
-    altura_imagen, ancho_imagen = len(imagen), len(imagen[0])
-    altura_kernel, ancho_kernel = len(kernel), len(kernel[0])
-    resultado = np.zeros((altura_imagen - altura_kernel + 1,
-                         ancho_imagen - ancho_kernel + 1), dtype=np.float32)
-
-    # Iterar a través de la imagen
-    for i in range(altura_imagen - altura_kernel + 1):
-        for j in range(ancho_imagen - ancho_kernel + 1):
-            suma = 0
-            # Realizar la convolución en la región de la imagen correspondiente al tamaño del kernel
-            for x in range(altura_kernel):
-                for y in range(ancho_kernel):
-                    suma += imagen[i + x][j + y] * kernel[x][y]
-            resultado[i][j] = suma
-
-    return resultado
-
-
-def mostrar_imagen_modificada(imagen):
-    # Convert the modified image to RGB mode
-    imagen_rgb = imagen.convert("RGB")
-
-    # Convert the RGB image to PhotoImage format for Tkinter
-    imagen_tk = ImageTk.PhotoImage(imagen_rgb)
-
-    # Update the label to display the modified image
-    imagen_label.config(image=imagen_tk)
-    imagen_label.image = imagen_tk
-
+from imgMan import *
 
 def guardar_imagen_modificada(imagen):
     # Ask the user for the save file location
@@ -68,6 +18,16 @@ def guardar_imagen_modificada(imagen):
             resultado_label.config(
                 text='Error al guardar la imagen: ' + str(e))
 
+def mostrar_imagen_modificada(imagen):
+    # Convert the modified image to RGB mode
+    imagen_rgb = imagen.convert("RGB")
+
+    # Convert the RGB image to PhotoImage format for Tkinter
+    imagen_tk = ImageTk.PhotoImage(imagen_rgb)
+
+    # Update the label to display the modified image
+    imagen_label.config(image=imagen_tk)
+    imagen_label.image = imagen_tk
 
 def cambiar_tamano_imagen():
     k1 = np.array([
