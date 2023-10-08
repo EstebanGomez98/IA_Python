@@ -3,7 +3,7 @@ from tkinter import filedialog
 from PIL import Image, ImageTk
 import numpy as np
 from imgMan import *
-
+from ia_logica import *
 
 def guardar_imagen_modificada(imagen):
     # Ask the user for the save file location
@@ -106,7 +106,27 @@ def cambiar_tamano_imagen():
 
 # Function to train
 def entrenar():
-    # Add your training code here
+    # Define your input data and labels
+    X = np.zeros((1, 400))
+    yd = np.zeros((1, 3))
+    
+    input_size = 400
+    hidden_size1 = 100
+    hidden_size2 = 100
+    output_size = 3
+
+    alpha = 0.001
+    beta = 0.9
+    error_deseado = 0.01
+
+    weights_input_hidden1, weights_hidden1_hidden2, weights_hidden2_output = initialize_weights(
+        input_size, hidden_size1, hidden_size2, output_size)
+
+    errores = train_neural_network(X, yd, weights_input_hidden1, weights_hidden1_hidden2, weights_hidden2_output, alpha, beta, error_deseado)
+
+    new_input = np.array([22.1, 3.1, 3.1, 1.1, 4.1])
+    predicted_output = test_neural_network(
+        new_input, weights_input_hidden1, weights_hidden1_hidden2, weights_hidden2_output)
     resultado_label.config(text='Entrenamiento en progreso...')
 
 # Function to recognize image
