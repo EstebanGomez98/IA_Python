@@ -2,8 +2,10 @@ import tkinter as tk
 from tkinter import filedialog
 from PIL import Image, ImageTk
 import numpy as np
+import os
 from imgMan import *
 from ia_logica import *
+# Define your convolucion and cambiar_tamano_array functions here
 
 def guardar_imagen_modificada(imagen):
     # Ask the user for the save file location
@@ -19,7 +21,6 @@ def guardar_imagen_modificada(imagen):
             resultado_label.config(
                 text='Error al guardar la imagen: ' + str(e))
 
-
 def mostrar_imagen_modificada(imagen):
     # Convert the modified image to RGB mode
     imagen_rgb = imagen.convert("RGB")
@@ -30,7 +31,6 @@ def mostrar_imagen_modificada(imagen):
     # Update the label to display the modified image
     imagen_label.config(image=imagen_tk)
     imagen_label.image = imagen_tk
-
 
 def cambiar_tamano_imagen():
     k1 = np.array([
@@ -105,33 +105,69 @@ def cambiar_tamano_imagen():
             print(e)
 
 # Function to train
+# Function to train
 def entrenar():
-    # Define your input data and labels
-    X = np.zeros((1, 400))
-    yd = np.zeros((1, 3))
-    
-    input_size = 400
-    hidden_size1 = 100
-    hidden_size2 = 100
-    output_size = 3
+    # Define the input folder containing images and the output folder for resized images
+    input_folder = "input_images/"
+    output_folder = "output_images/"
 
-    alpha = 0.001
-    beta = 0.9
-    error_deseado = 0.01
+    # Ensure the output folder exists, create it if necessary
+    os.makedirs(output_folder, exist_ok=True)
 
-    weights_input_hidden1, weights_hidden1_hidden2, weights_hidden2_output = initialize_weights(
-        input_size, hidden_size1, hidden_size2, output_size)
+    # Get a list of all image files in the input folder
+    image_files = [f for f in os.listdir(input_folder) if f.endswith(('.jpg', '.png', '.jpeg'))]
 
+    if not image_files:
+        resultado_label.config(text='No images found in the input folder.')
+        return
+
+    # Initialize empty lists to store input data (X) and labels (yd)
+    X_list = []
+    yd_list = []
+
+    # Process all images from the input folder
+    for i, image_filename in enumerate(image_files):
+        try:
+            # Construct the full path for the current image
+            image_path = os.path.join(input_folder, image_filename)
+
+            # Open the image
+            imagen = Image.open(image_path)
+
+            # Convert the image to an array
+            matriz_img = np.array(imagen.convert("L"))
+
+            # Apply transformations using cambiar_tamano_imagen
+            resultado = cambiar_tamano_imagen(matriz_img)
+
+            # Append the image array to the input data list (X)
+            X_list.append(resultado)
+
+            # Create a label (yd) for the current image (you need to define this logic)
+            # For example, if you have labels for your images, you can create yd accordingly.
+            # yd_list.append(label_for_current_image)
+
+            # Save the modified image to the output folder
+            output_filename = os.path.join(output_folder, f"image_{i + 1}_modified.png")
+            imagen_modificada = Image.fromarray(resultado.astype('uint8'))
+            imagen_modificada.save(output_filename)
+
+        except Exception as e:
+            print(f'Error processing image {image_filename}: {str(e)}')
+
+    # Convert the input data lists to NumPy arrays
+    X = np.array(X_list)
+    yd = np.array(yd_list)
+
+    # Call the train_neural_network function with X and yd
     errores = train_neural_network(X, yd, weights_input_hidden1, weights_hidden1_hidden2, weights_hidden2_output, alpha, beta, error_deseado)
 
-    new_input = np.array([22.1, 3.1, 3.1, 1.1, 4.1])
-    predicted_output = test_neural_network(
-        new_input, weights_input_hidden1, weights_hidden1_hidden2, weights_hidden2_output)
-    resultado_label.config(text='Entrenamiento en progreso...')
+    resultado_label.config(text=f'Entrenamiento completo. {len(image_files)} imágenes procesadas y guardadas en la carpeta de salida.')
+
 
 # Function to recognize image
 def reconocer_imagen():
-    # Add your image recognition code here
+    # Call your recognition logic here
     resultado_label.config(text='Reconociendo imagen...')
 
 # Function to exit the program
