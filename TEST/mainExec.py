@@ -52,7 +52,7 @@ def cambiar_tamano_imagen():
         [-2, 5, -2],
         [1, -2, 1]])
 
-    # deteccion de vordes
+    # deteccion de bordes
     k5 = np.array([
         [0, 1, 0],
         [1, -4, 1],
@@ -94,40 +94,52 @@ def cambiar_tamano_imagen():
             mostrar_imagen_modificada(imagen_redimensionada)
 
             # Enable the guardar_boton button
-            guardar_boton.config(
+            guardar_imagen_modificada.config(
                 state=tk.NORMAL, command=lambda: guardar_imagen_modificada(imagen_redimensionada))
 
         except Exception as e:
             resultado_label.config(text='Error: ' + str(e))
             print(e)
 
+# Function to train
+def entrenar():
+    # Add your training code here
+    resultado_label.config(text='Entrenamiento en progreso...')
 
-# Crear una ventana de tkinter con dimensiones personalizadas
+# Function to recognize image
+def reconocer_imagen():
+    # Add your image recognition code here
+    resultado_label.config(text='Reconociendo imagen...')
+
+# Function to exit the program
+def salir():
+    ventana.quit()
+
+# Create a tkinter window with custom dimensions
 ventana = tk.Tk()
-ventana.title('Redimensionar y Filtrar Imagen')
+ventana.title('Entrenamiento y Reconocimiento de Imágenes')
 
-# Definir las dimensiones de la ventana (ancho x alto)
+# Define the dimensions of the window (width x height)
 dimensiones_ventana = "800x600"
 ventana.geometry(dimensiones_ventana)
 
-# Botón para seleccionar una imagen
-seleccionar_boton = tk.Button(
-    ventana, text='Seleccionar Imagen', command=cambiar_tamano_imagen)
-seleccionar_boton.pack(pady=50)
+# Buttons
+entrenar_boton = tk.Button(ventana, text='Entrenar', command=entrenar)
+entrenar_boton.pack(pady=50)
 
+reconocer_boton = tk.Button(ventana, text='Reconocer Imagen', command=reconocer_imagen)
+reconocer_boton.pack()
 
-# Botón para guardar la imagen modificada
-guardar_boton = tk.Button(
-    ventana, text='Guardar Imagen Modificada', state=tk.DISABLED)
-guardar_boton.pack()
+salir_boton = tk.Button(ventana, text='Salir', command=salir)
+salir_boton.pack()
 
-# Etiqueta para mostrar el resultado
+# Label to display the result
 resultado_label = tk.Label(ventana, text='')
 resultado_label.pack()
 
-# Etiqueta para mostrar la imagen redimensionada
+# Label to display the modified image
 imagen_label = tk.Label(ventana)
 imagen_label.pack()
 
-# Iniciar el bucle principal de tkinter
+# Start the main tkinter loop
 ventana.mainloop()
