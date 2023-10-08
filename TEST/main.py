@@ -79,6 +79,9 @@ def cambiar_tamano_imagen(ruta_imagen):
 
 
 def entrenar():
+
+    global wih1, wh1h2, wh2o, error
+
     # Define your input data and labels
     X = np.zeros((1, 400))
     yd = np.zeros((1, 3))
@@ -155,7 +158,7 @@ def entrenar():
     weights_input_hidden1, weights_hidden1_hidden2, weights_hidden2_output = initialize_weights(
         input_size, hidden_size1, hidden_size2, output_size)
 
-    errores = train_neural_network(
+    wih1, wh1h2, wh2o, error = train_neural_network(
         X, yd, weights_input_hidden1, weights_hidden1_hidden2, weights_hidden2_output, alpha, beta, error_deseado)
 
     resultado_label.config(text='Entrenamiento en progreso...')
@@ -164,8 +167,22 @@ def entrenar():
 
 
 def reconocer_imagen():
+
+    valores_redondeados = test_neural_network(new_input, wih1, wh1h2, wh2o)
+    letter = ""
+    match valores_redondeados:
+        case [1.0, 0.0, 0.0]:
+            letter = "A"
+        case [0.0, 1.0, 0.0]:
+            letter = "E"
+        case [0.0, 0.0, 1.0]:
+            letter = "I"
+        case [1.0, 1.0, 0.0]:
+            letter = "O"
+        case [0.0, 1.0, 1.0]:
+            letter = "U"
     # Call your recognition logic here
-    resultado_label.config(text='Reconociendo imagen...')
+    resultado_label.config(text=letter)
 
 # Function to exit the program
 

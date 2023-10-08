@@ -70,7 +70,7 @@ def train_neural_network(X, yd, weights_input_hidden1, weights_hidden1_hidden2, 
                                   alpha * X.T.dot(d_hidden_layer1))
         weights_input_hidden1 += momentum_input_hidden1
 
-    return errores
+    return weights_input_hidden1, weights_hidden1_hidden2, weights_hidden2_output, error
 
 
 def test_neural_network(new_input, weights_input_hidden1, weights_hidden1_hidden2, weights_hidden2_output):
