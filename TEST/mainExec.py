@@ -4,6 +4,7 @@ from PIL import Image, ImageTk
 import numpy as np
 from imgMan import *
 
+
 def guardar_imagen_modificada(imagen):
     # Ask the user for the save file location
     ruta_guardar = filedialog.asksaveasfilename(
@@ -18,6 +19,7 @@ def guardar_imagen_modificada(imagen):
             resultado_label.config(
                 text='Error al guardar la imagen: ' + str(e))
 
+
 def mostrar_imagen_modificada(imagen):
     # Convert the modified image to RGB mode
     imagen_rgb = imagen.convert("RGB")
@@ -28,6 +30,7 @@ def mostrar_imagen_modificada(imagen):
     # Update the label to display the modified image
     imagen_label.config(image=imagen_tk)
     imagen_label.image = imagen_tk
+
 
 def cambiar_tamano_imagen():
     k1 = np.array([
@@ -88,7 +91,7 @@ def cambiar_tamano_imagen():
             imagen_modificada = Image.fromarray(resultado.astype('uint8'))
 
             # Cambiar el tamaño de la imagen
-            imagen_redimensionada = imagen_modificada.resize((100, 100))
+            imagen_redimensionada = imagen_modificada.resize((20, 20))
 
             # Mostrar la imagen modificada después de aplicar los filtros
             mostrar_imagen_modificada(imagen_redimensionada)

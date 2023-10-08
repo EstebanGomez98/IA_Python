@@ -1,0 +1,121 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Definir la función de activación sigmoide y su derivada
+
+
+def sigmoid(x):
+    return 1 / (1 + np.exp(-x))
+
+
+def sigmoid_derivative(x):
+    return x * (1 - x)
+
+
+# Definir los datos de entrenamiento
+X = np.zeros((1, 400))
+
+# Definir las etiquetas correspondientes
+yd = np.zeros((1, 3))
+print(yd)
+# Initialize the neural network parameters
+input_size = 400
+hidden_size1 = 100  # Tamaño de la primera capa oculta
+hidden_size2 = 100  # Tamaño de la segunda capa oculta
+output_size = 3
+
+# Alpha (tasa de aprendizaje)
+alpha = 0.001
+
+# Beta (momentum)
+beta = 0.9
+
+# Error deseado mínimo
+error_deseado = 0.01
+
+# Inicializar los pesos y sesgos para la primera capa oculta
+np.random.seed(1)
+weights_input_hidden1 = np.random.uniform(size=(input_size, hidden_size1))
+weights_hidden1_hidden2 = np.random.uniform(size=(hidden_size1, hidden_size2))
+
+# Inicializar los pesos y sesgos para la segunda capa oculta
+weights_hidden2_output = np.random.uniform(size=(hidden_size2, output_size))
+
+# Inicializar los términos de momentum para la primera capa oculta
+momentum_input_hidden1 = np.zeros_like(weights_input_hidden1)
+momentum_hidden1_hidden2 = np.zeros_like(weights_hidden1_hidden2)
+
+# Inicializar los términos de momentum para la segunda capa oculta
+momentum_hidden2_output = np.zeros_like(weights_hidden2_output)
+
+errores = []
+
+# Training the neural network
+for epoch in range(10000):  # Puedes ajustar el número de épocas según sea necesario
+    print(epoch)
+    # Forward propagation
+    hidden_layer1_input = np.dot(X, weights_input_hidden1)
+    hidden_layer1_output = sigmoid(hidden_layer1_input)
+
+    hidden_layer2_input = np.dot(hidden_layer1_output, weights_hidden1_hidden2)
+    hidden_layer2_output = sigmoid(hidden_layer2_input)
+
+    output_layer_input = np.dot(hidden_layer2_output, weights_hidden2_output)
+    output_layer_output = sigmoid(output_layer_input)
+
+    # Calculate the loss
+    error = yd - output_layer_output
+    mean_squared_error = 0.5 * np.mean(error**2)  # MSE loss
+    errores.append(mean_squared_error)
+
+    if mean_squared_error <= error_deseado:
+        print(
+            f"Error deseado alcanzado en la época {epoch}. Deteniendo el entrenamiento.")
+        break
+
+    # Backpropagation
+    d_output = error * sigmoid_derivative(output_layer_output)
+
+    error_hidden_layer2 = d_output.dot(weights_hidden2_output.T)
+    d_hidden_layer2 = error_hidden_layer2 * \
+        sigmoid_derivative(hidden_layer2_output)
+
+    error_hidden_layer1 = d_hidden_layer2.dot(weights_hidden1_hidden2.T)
+    d_hidden_layer1 = error_hidden_layer1 * \
+        sigmoid_derivative(hidden_layer1_output)
+
+    # Actualice pesos y sesgos con momentum para la segunda capa oculta
+    momentum_hidden2_output = (beta * momentum_hidden2_output +
+                               alpha * hidden_layer2_output.T.dot(d_output))
+    weights_hidden2_output += momentum_hidden2_output
+
+    # Actualice pesos y sesgos con momentum para la primera capa oculta
+    momentum_hidden1_hidden2 = (beta * momentum_hidden1_hidden2 +
+                                alpha * hidden_layer1_output.T.dot(d_hidden_layer2))
+    weights_hidden1_hidden2 += momentum_hidden1_hidden2
+
+    momentum_input_hidden1 = (beta * momentum_input_hidden1 +
+                              alpha * X.T.dot(d_hidden_layer1))
+    weights_input_hidden1 += momentum_input_hidden1
+
+# Testing the neural network
+new_input = np.array([22.1, 3.1, 3.1, 1.1, 4.1])
+hidden_layer1_input = np.dot(new_input, weights_input_hidden1)
+hidden_layer1_output = sigmoid(hidden_layer1_input)
+
+hidden_layer2_input = np.dot(hidden_layer1_output, weights_hidden1_hidden2)
+hidden_layer2_output = sigmoid(hidden_layer2_input)
+
+output_layer_input = np.dot(hidden_layer2_output, weights_hidden2_output)
+predicted_output = sigmoid(output_layer_input)
+valores_redondeados = [round(valor, 1) for valor in predicted_output]
+
+print("Entrada:", new_input)
+print("Salida Pronosticada:", valores_redondeados)
+
+# Graficar el error cuadrático medio a lo largo de las épocas de entrenamiento
+plt.plot(errores)
+plt.xlabel('Época')
+plt.ylabel('Error Cuadrático Medio')
+plt.title('Error de Entrenamiento (MSE) a lo largo de las Épocas')
+plt.show()
