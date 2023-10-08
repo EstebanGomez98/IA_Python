@@ -34,7 +34,11 @@ def mostrar_imagen_modificada(imagen):
     imagen_label.image = imagen_tk
 
 
-def cambiar_tamano_imagen(ruta_imagen):
+def cambiar_tamano_imagen(imagen):
+    output_folder = "output_images/"
+
+    os.makedirs(output_folder, exist_ok=True)
+
     k1 = np.array([
         [1, 0, -1],
         [1, 0, -1],
@@ -63,16 +67,22 @@ def cambiar_tamano_imagen(ruta_imagen):
         [1, -4, 1],
         [0, 1, 0]])
 
-    if ruta_imagen:
+    if imagen:
         try:
-            matriz_img = ruta_imagen
+            # Convert the image to an array
+            matriz_img = np.array(imagen.convert("L"))
+            print("convolucion 1")
             resultado = convolucion(matriz_img, k5)
+            print("convolucion 2")
             resultado = convolucion(resultado, k3)
+            print("convolucion 3")
             resultado = convolucion(resultado, k4)
+            print("fin convolucion")
             imagen_modificada = Image.fromarray(resultado.astype('uint8'))
             imagen_redimensionada = imagen_modificada.resize((20, 20))
-            img_array = np.array(imagen_redimensionada)
-            return img_array
+            pixel_data = list(imagen_redimensionada.getdata())
+
+            return pixel_data
 
         except Exception as e:
             resultado_label.config(text='Error: ' + str(e))
@@ -96,9 +106,6 @@ def entrenar():
     error_deseado = 0.01
 
     input_folder = "input_images/"
-    output_folder = "output_images/"
-
-    os.makedirs(output_folder, exist_ok=True)
 
     # Get a list of all image files in the input folder
     image_files = [f for f in os.listdir(
@@ -107,9 +114,6 @@ def entrenar():
     if not image_files:
         resultado_label.config(text='No images found in the input folder.')
         return
-
-    # Initialize empty lists to store input data (X) and labels (yd)
-    yd_list = []
 
     # Process all images from the input folder
     for i, image_filename in enumerate(image_files):
@@ -120,20 +124,10 @@ def entrenar():
             # Open the image
             imagen = Image.open(image_path)
 
-            # Convert the image to an array
-            matriz_img = np.array(imagen.convert("L"))
-
+            print(image_filename)
             # Apply transformations using cambiar_tamano_imagen
-            resultado = cambiar_tamano_imagen(matriz_img)
-
-            # Append the image array to the input data list (X)
+            resultado = cambiar_tamano_imagen(imagen)
             X = np.vstack((X, resultado))
-
-            # Save the modified image to the output folder
-            output_filename = os.path.join(
-                output_folder, f"image_{i + 1}_modified.png")
-            imagen_modificada = Image.fromarray(resultado.astype('uint8'))
-            imagen_modificada.save(output_filename)
 
         except Exception as e:
             print(f'Error processing image {image_filename}: {str(e)}')
@@ -194,7 +188,7 @@ def reconocer_imagen():
                         letter = "U"
                     case _:
                         letter = "No se que hacer"
-                
+
                 # Update the result label with the recognized letter
                 resultado_label.config(text=letter)
             else:
