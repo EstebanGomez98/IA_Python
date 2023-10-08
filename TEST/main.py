@@ -5,6 +5,7 @@ import numpy as np
 from imgMan import *
 from ia_logica import *
 
+
 def guardar_imagen_modificada(imagen):
     # Ask the user for the save file location
     ruta_guardar = filedialog.asksaveasfilename(
@@ -105,11 +106,13 @@ def cambiar_tamano_imagen():
             print(e)
 
 # Function to train
+
+
 def entrenar():
     # Define your input data and labels
     X = np.zeros((1, 400))
     yd = np.zeros((1, 3))
-    
+
     input_size = 400
     hidden_size1 = 100
     hidden_size2 = 100
@@ -122,21 +125,42 @@ def entrenar():
     weights_input_hidden1, weights_hidden1_hidden2, weights_hidden2_output = initialize_weights(
         input_size, hidden_size1, hidden_size2, output_size)
 
-    errores = train_neural_network(X, yd, weights_input_hidden1, weights_hidden1_hidden2, weights_hidden2_output, alpha, beta, error_deseado)
+    resultado_label.config(text='Entrenamiento en progreso...')
+# arreglar debe devolver los valores de los pesos
+    errores = train_neural_network(
+        X, yd, weights_input_hidden1, weights_hidden1_hidden2, weights_hidden2_output, alpha, beta, error_deseado)
+    resultado_label.config(text='Entrenamiento Finalizado')
 
     new_input = np.array([22.1, 3.1, 3.1, 1.1, 4.1])
-    predicted_output = test_neural_network(
+    valores_redondeados = test_neural_network(
         new_input, weights_input_hidden1, weights_hidden1_hidden2, weights_hidden2_output)
-    resultado_label.config(text='Entrenamiento en progreso...')
+    letter = ""
+    match valores_redondeados:
+        case [1.0, 0.0, 0.0]:
+            letter = "A"
+        case [0.0, 1.0, 0.0]:
+            letter = "E"
+        case [0.0, 0.0, 1.0]:
+            letter = "I"
+        case [1.0, 1.0, 0.0]:
+            letter = "O"
+        case [0.0, 1.0, 1.0]:
+            letter = "U"
+    resultado_label.config(text=letter)
 
 # Function to recognize image
+
+
 def reconocer_imagen():
     # Add your image recognition code here
     resultado_label.config(text='Reconociendo imagen...')
 
 # Function to exit the program
+
+
 def salir():
     ventana.quit()
+
 
 # Create a tkinter window with custom dimensions
 ventana = tk.Tk()
@@ -150,7 +174,8 @@ ventana.geometry(dimensiones_ventana)
 entrenar_boton = tk.Button(ventana, text='Entrenar', command=entrenar)
 entrenar_boton.pack(pady=50)
 
-reconocer_boton = tk.Button(ventana, text='Reconocer Imagen', command=reconocer_imagen)
+reconocer_boton = tk.Button(
+    ventana, text='Reconocer Imagen', command=reconocer_imagen)
 reconocer_boton.pack()
 
 salir_boton = tk.Button(ventana, text='Salir', command=salir)
