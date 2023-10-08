@@ -192,6 +192,8 @@ def reconocer_imagen():
                         letter = "O"
                     case [0.0, 1.0, 1.0]:
                         letter = "U"
+                    case _:
+                        letter = "No se que hacer"
                 
                 # Update the result label with the recognized letter
                 resultado_label.config(text=letter)
