@@ -167,22 +167,40 @@ def entrenar():
 
 
 def reconocer_imagen():
+    # Ask the user to select an image
+    ruta_imagen = filedialog.askopenfilename(
+        filetypes=[("Image files", "*.png *.jpg *.jpeg")])
 
-    valores_redondeados = test_neural_network(new_input, wih1, wh1h2, wh2o)
-    letter = ""
-    match valores_redondeados:
-        case [1.0, 0.0, 0.0]:
-            letter = "A"
-        case [0.0, 1.0, 0.0]:
-            letter = "E"
-        case [0.0, 0.0, 1.0]:
-            letter = "I"
-        case [1.0, 1.0, 0.0]:
-            letter = "O"
-        case [0.0, 1.0, 1.0]:
-            letter = "U"
-    # Call your recognition logic here
-    resultado_label.config(text=letter)
+    if ruta_imagen:
+        try:
+            # Call the cambiar_tamano_imagen function with the selected image
+            new_input = cambiar_tamano_imagen(ruta_imagen)
+
+            if new_input is not None:
+                # Use the new_input for recognition
+                valores_redondeados = test_neural_network(
+                    new_input, wih1, wh1h2, wh2o)
+                letter = ""
+                match valores_redondeados:
+                    case [1.0, 0.0, 0.0]:
+                        letter = "A"
+                    case [0.0, 1.0, 0.0]:
+                        letter = "E"
+                    case [0.0, 0.0, 1.0]:
+                        letter = "I"
+                    case [1.0, 1.0, 0.0]:
+                        letter = "O"
+                    case [0.0, 1.0, 1.0]:
+                        letter = "U"
+                
+                # Update the result label with the recognized letter
+                resultado_label.config(text=letter)
+            else:
+                resultado_label.config(text='Error processing the image.')
+
+        except Exception as e:
+            resultado_label.config(text='Error: ' + str(e))
+
 
 # Function to exit the program
 
