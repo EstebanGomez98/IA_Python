@@ -236,25 +236,27 @@ def entrenar():
     for i in range(5):
         yd = np.vstack((yd, [1.0, 0.0, 0.0]))
     # E
-    for i in range(5):
-        yd = np.vstack((yd, [0.0, 1.0, 0.0]))
+    # for i in range(5):
+    #    yd = np.vstack((yd, [0.0, 1.0, 0.0]))
     # I
-    for i in range(5):
-        yd = np.vstack((yd, [0.0, 0.0, 1.0]))
+    # for i in range(5):
+    #    yd = np.vstack((yd, [0.0, 0.0, 1.0]))
     # O
-    for i in range(5):
-        yd = np.vstack((yd, [1.0, 1.0, 0.0]))
+    # for i in range(5):
+    #    yd = np.vstack((yd, [1.0, 1.0, 0.0]))
     # U
-    for i in range(5):
-        yd = np.vstack((yd, [0.0, 1.0, 1.0]))
+    # for i in range(5):
+    #    yd = np.vstack((yd, [0.0, 1.0, 1.0]))
 
+    resultado_label.config(text='inicializando pesos')
     weights_input_hidden1, weights_hidden1_hidden2, weights_hidden2_output = initialize_weights(
         input_size, hidden_size1, hidden_size2, output_size)
 
+    resultado_label.config(text='Entrenamiento en progreso...')
     wih1, wh1h2, wh2o, error = train_neural_network(
         X, yd, weights_input_hidden1, weights_hidden1_hidden2, weights_hidden2_output, alpha, beta, error_deseado)
 
-    resultado_label.config(text='Entrenamiento en progreso...')
+    resultado_label.config(text='Fin Entrenamiento')
 
 # Function to recognize image
 
