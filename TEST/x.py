@@ -71,7 +71,7 @@ else:
         print('Finalización Proceso de convoluciones')
 
         imagen_modificada = Image.fromarray(resultado.astype('uint8'))
-        imagen_redimensionada = imagen_modificada.resize((20, 20))
+        imagen_redimensionada = imagen_modificada.resize((100, 100))
 
         # Obtener el nombre del archivo sin la extensión
         nombre, extension = os.path.splitext(os.path.basename(file_path))
